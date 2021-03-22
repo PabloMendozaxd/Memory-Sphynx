@@ -6,32 +6,15 @@ export class MemorySphynx extends LitElement {
       :host {
         display: block;
         padding: 25px;
-        color: var(--memory-sphynx-text-color, #000);
+        border:1px solid black;
       }
     `;
   }
 
-  static get properties() {
-    return {
-      title: { type: String },
-      counter: { type: Number },
-    };
-  }
-
-  constructor() {
-    super();
-    this.title = 'Hey there';
-    this.counter = 5;
-  }
-
-  __increment() {
-    this.counter += 1;
-  }
-
   render() {
     return html`
-      <score-memory-sphynx >
-      </score-memory-sphynx>
+      <h1>Hola</h1>
+      <score-memory-sphynx></score-memory-sphynx>
       <card-memory-sphynx></card-memory-sphynx>
     `
   }
