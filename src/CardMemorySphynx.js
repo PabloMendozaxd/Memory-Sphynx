@@ -5,13 +5,17 @@ export class CardMemorySphynx extends LitElement {
         return css`
           :host {
             display: block;
-            border:1px solid black;
+          }
+          img{
+            height:100%;
+            width:100%;
+            border-radius:22px;
           }
         `;
     }
     render() {
         return html`
-        
+        <img src="../assets/img/Picture1.png">
 
         `;
     }

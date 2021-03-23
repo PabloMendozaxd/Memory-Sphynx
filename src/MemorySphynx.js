@@ -9,17 +9,19 @@ export class MemorySphynx extends LitElement {
         padding:20%;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
         gap: 12px 12px;
         grid-template-areas:
           ". . . . . ."
           ". . . . . ."
           ". . . . . ."
           ". . . . . ."
+          ". . . . . ."
           ". . . . . .";
       }
-      #card-container{
-
+      score-memory-sphynx{
+        grid-column: 1/7;
+        grid-row: 1/2;
       }
     `;
   }
@@ -27,9 +29,7 @@ export class MemorySphynx extends LitElement {
   render() {
     return html`
       <score-memory-sphynx></score-memory-sphynx>
-      <div id="card-container">
       <card-memory-sphynx></card-memory-sphynx>
-      </div>
     `
   }
 }
