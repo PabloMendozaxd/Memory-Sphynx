@@ -25,7 +25,18 @@ export class MemorySphynx extends LitElement {
       }
     `;
   }
-
+  connectedCallback() {
+    super.connectedCallback()
+    this.showCards()
+  }
+ showCards(){
+  const getRandom = () => {
+    const min = Math.ceil(1);
+    const max = Math.floor(15);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+  console.log(getRandom())
+ }
   render() {
     return html`
       <score-memory-sphynx></score-memory-sphynx>

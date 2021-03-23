@@ -19,7 +19,6 @@ export class CardMemorySphynx extends LitElement {
             backdrop-filter: blur( 4px );
             -webkit-backdrop-filter: blur( 4px );
             border-radius: 22px;
-            border: 1px solid rgba( 255, 255, 255, 0.18 );
           }
           #card:hover{
             -webkit-box-shadow: 0px 0px 20px 1px #000000; 
@@ -33,11 +32,40 @@ export class CardMemorySphynx extends LitElement {
           }
         `;
     }
-   
-    render() { this.picked=false;
+
+    static get properties() {
+      return {
+        picture: {
+          type: String,
+        },
+        matched: {
+          type: Boolean,
+        },
+        picked: {
+          type: Boolean,
+        },
+      };
+    }
+    connectedCallback() {
+      super.connectedCallback()
+      this.matched=false;
+      this.picked=false;
+      this.picture="1";
+    }
+
+    firstUpdated() {
+      this.addEventListener('matched', () => {
+        this.matched = true;
+      });
+      this.addEventListener('picked', () => {
+        this.picked = true;
+      });
+    }
+
+    render() {
         return html`
-        <div id="card" class="${this.played ? 'matched' : ''}">
-        <img class="${this.picked ? '' :'picked'}"src="../assets/img/Picture1.png">
+        <div id="card" class="${this.matched ? 'matched' : ''}">
+        <img class="${this.picked ? '' :'picked'}"src="../assets/img/Picture1.png"">
         </div>
         
         `;
