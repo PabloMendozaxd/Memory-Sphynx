@@ -3,8 +3,18 @@
 <head>
   <meta charset="utf-8">
   <style>
+    *{
+      box-sizing: border-box;
+      margin: 0;
+    }
     body {
+      height: 100%;
+      width: 100%;
       background: #fafafa;
+    }
+    memory-sphynx{
+      height: 100vh;
+      width: 100%;
     }
   </style>
 </head>
@@ -17,7 +27,6 @@
 
     render(
       html`
-      <h1>Hola</h1>
         <memory-sphynx></memory-sphynx>
       `,
       document.querySelector('#demo')

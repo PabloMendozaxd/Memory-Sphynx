@@ -11,6 +11,7 @@ export class CardMemorySphynx extends LitElement {
     }
     render() {
         return html`
+        
 
         `;
     }
