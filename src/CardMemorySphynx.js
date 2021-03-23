@@ -49,7 +49,7 @@ export class CardMemorySphynx extends LitElement {
     connectedCallback() {
       super.connectedCallback()
       this.matched=false;
-      this.picked=false;
+      this.picked=true;
       this.picture="1";
     }
 
@@ -65,7 +65,7 @@ export class CardMemorySphynx extends LitElement {
     render() {
         return html`
         <div id="card" class="${this.matched ? 'matched' : ''}">
-        <img class="${this.picked ? '' :'picked'}"src="../assets/img/Picture1.png"">
+        <img class="${this.picked ? '' :'picked'}" src=../assets/img/Picture${this.picture}.png>
         </div>
         
         `;
