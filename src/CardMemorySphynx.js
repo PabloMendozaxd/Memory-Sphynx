@@ -50,7 +50,6 @@ export class CardMemorySphynx extends LitElement {
       super.connectedCallback()
       this.matched=false;
       this.picked=true;
-      this.picture="1";
     }
 
     firstUpdated() {

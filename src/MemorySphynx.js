@@ -25,22 +25,44 @@ export class MemorySphynx extends LitElement {
       }
     `;
   }
+  static get properties() {
+    return {
+      cards: {
+        type: Array,
+        value: [],
+      }
+    }
+  }
+  
   connectedCallback() {
     super.connectedCallback()
     this.showCards()
   }
- showCards(){
-  const getRandom = () => {
-    const min = Math.ceil(1);
-    const max = Math.floor(15);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-  console.log(getRandom())
- }
+  showCards() {
+    this.deck=[];
+    const getRandom = () => {
+      const min = Math.ceil(1);
+      const max = Math.floor(15);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    for (let index = 0; index < 15; index++) {
+      const element = this.deck[index];
+      this.deck.push(getRandom())
+    }
+    this.cards=this.deck;
+  }
   render() {
     return html`
       <score-memory-sphynx></score-memory-sphynx>
-      <card-memory-sphynx></card-memory-sphynx>
+      ${this.cards.map(
+        i => {
+          return html`
+          <card-memory-sphynx picture="${i}">
+            
+          </card-memory-sphynx>`
+        } 
+      )}
     `
   }
 }
