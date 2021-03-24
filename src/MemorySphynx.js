@@ -36,21 +36,17 @@ export class MemorySphynx extends LitElement {
   
   connectedCallback() {
     super.connectedCallback()
-    this.showCards()
+    this.createCards()
   }
-  showCards() {
-    this.deck=[];
-    const getRandom = () => {
-      const min = Math.ceil(1);
-      const max = Math.floor(15);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-
-    for (let index = 0; index < 15; index++) {
-      const element = this.deck[index];
-      this.deck.push(getRandom())
+  createCards() {
+    this.imgArray=[];
+    const numberOfCards=15;
+    
+    for (let i = 0; i < numberOfCards; i++) {
+      this.imgArray.push(i+1);
+      this.imgArray.push(i+1);
     }
-    this.cards=this.deck;
+    this.cards=this.imgArray.sort(function(a,b) {return (Math.random()-0.5)});
   }
   render() {
     return html`
