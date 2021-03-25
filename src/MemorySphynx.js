@@ -41,13 +41,16 @@ export class MemorySphynx extends LitElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback()
-    this.createCards()
+  constructor(){
+    super()
     this.canMove = true;
     this.opened = [];
     this.clicked = true;
     this.score = { 1: 0, 2: 0 }
+  }
+  connectedCallback() {
+    super.connectedCallback()
+    this.createCards()
   }
   createCards() {
     this.imgArray = [];
@@ -58,7 +61,6 @@ export class MemorySphynx extends LitElement {
       this.imgArray.push(i + 1);
     }
     this.cards = this.imgArray.sort(function (a, b) { return (Math.random() - 0.5) });
-    console.log(this.cards)
   }
   myEvent(event, detail) {
     this.dispatchEvent(new Event(event, detail));
@@ -73,23 +75,28 @@ export class MemorySphynx extends LitElement {
           picture: e.target.picture,
           target: e.target,
         })
-      this.opened.length ? this.validatePair() : '';
+        if (this.opened.length==2) {
+          this.validatePair();
+        }
     }
   }
 
   close(event) {
+    return new Promise(res => {
+      setTimeout(() => {
     this.opened[0].target.dispatchEvent(new Event(event));
     this.opened[1].target.dispatchEvent(new Event(event));
     this.opened = [];
     this.clicked = true;
+    res();
+      }, 1500);
+    });
   }
   validatePair() {
     this.canMove = false;
-    console.log(this.opened[0].picture)
     if (this.opened[0].picture === this.opened[1].picture) {
-      console.log('Son pares')
+      this.close('matched')
     } else {
-      console.log('no son pares')
       this.close('close')
     }
   }

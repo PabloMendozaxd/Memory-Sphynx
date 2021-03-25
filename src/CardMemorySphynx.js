@@ -49,10 +49,13 @@ export class CardMemorySphynx extends LitElement {
         },
       };
     }
-    connectedCallback() {
-      super.connectedCallback()
+    constructor(){
+      super()
       this.matched=false;
       this.picked=false;
+    }
+    connectedCallback() {
+      super.connectedCallback()
     }
 
     firstUpdated() {
