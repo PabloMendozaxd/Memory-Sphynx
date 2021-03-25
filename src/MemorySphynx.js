@@ -63,6 +63,21 @@ export class MemorySphynx extends LitElement {
   __dispatchEvent(event, detail) {
     this.dispatchEvent(new Event(event, detail));
   }
+
+  
+  _openCard(e) {
+    e.target.dispatchEvent(new Event('picked'));
+    if (this.opened.length<2) {
+      this.opened.push(e.target.picture)  
+      if (this.opened[0]===this.opened[1]) {
+        console.log("Son pares")
+      }else{
+        this.__clearCards('close')
+      }
+    }
+    console.log(this.opened)
+  }
+  
   __clearCards(event) {
     return new Promise(res => {
       setTimeout(() => {
@@ -74,25 +89,6 @@ export class MemorySphynx extends LitElement {
       }, 1500);
     });
   }
-  _validPlay() {
-    this.canMove = false;
-    if (this.opened[0].picture === this.opened[1].picture) {
-      this.__clearCards('picked')
-    } else {
-      this.__clearCards('close').then(() => {
-        this.turn = this.turn === 1 ? 2 : 1;
-      });
-    }
-  }
-
-
-
-  _openCard(e) {
-    e.target.dispatchEvent(new Event('picked'));
-    console.log(e.target.picture)
-    
-  }
-
   render() {
     return html`
       <score-memory-sphynx></score-memory-sphynx>
