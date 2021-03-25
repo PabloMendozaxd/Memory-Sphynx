@@ -9,8 +9,8 @@ export class MemorySphynx extends LitElement {
         background:url("../assets/img/pink-sphynx-background.jpg") center/cover;
         padding:8%;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
         gap: 12px 12px;
         grid-template-areas:
           ". . . . . ."
@@ -32,22 +32,27 @@ export class MemorySphynx extends LitElement {
         type: Array,
         value: [],
       },
+      turn: {
+        type: Number,
+      },
       opened: {
         type: Array,
       },
       canMove: {
         type: Boolean,
-      }
-    }
+      },
+    };
   }
 
-  constructor(){
+  constructor() {
     super()
     this.canMove = true;
     this.opened = [];
     this.clicked = true;
     this.score = { 1: 0, 2: 0 }
+    this.gameDifficulty = 0;
   }
+
   connectedCallback() {
     super.connectedCallback()
     this.createCards()
@@ -61,6 +66,7 @@ export class MemorySphynx extends LitElement {
       this.imgArray.push(i + 1);
     }
     this.cards = this.imgArray.sort(function (a, b) { return (Math.random() - 0.5) });
+    console.log(this.cards)
   }
   myEvent(event, detail) {
     this.dispatchEvent(new Event(event, detail));
@@ -75,20 +81,20 @@ export class MemorySphynx extends LitElement {
           picture: e.target.picture,
           target: e.target,
         })
-        if (this.opened.length==2) {
-          this.validatePair();
-        }
+      if (this.opened.length == 2) {
+        this.validatePair();
+      }
     }
   }
 
   close(event) {
     return new Promise(res => {
       setTimeout(() => {
-    this.opened[0].target.dispatchEvent(new Event(event));
-    this.opened[1].target.dispatchEvent(new Event(event));
-    this.opened = [];
-    this.clicked = true;
-    res();
+        this.opened[0].target.dispatchEvent(new Event(event));
+        this.opened[1].target.dispatchEvent(new Event(event));
+        this.opened = [];
+        this.clicked = true;
+        res();
       }, 1500);
     });
   }
@@ -96,13 +102,29 @@ export class MemorySphynx extends LitElement {
     this.canMove = false;
     if (this.opened[0].picture === this.opened[1].picture) {
       this.close('matched')
+      this.score[this.turn] += 1;
+
+      if (this.score[1] + this.score[2] === length) {
+        this.__dispatchEvent('gameOver', {
+          detail: {
+            winner: this.score[1] > this.score[2] ? 1 : 2,
+          },
+        });
+      }
+      this.requestUpdate();
     } else {
-      this.close('close')
+      this.close('close').then(() => {
+        this.turn = this.turn === 1 ? 2 : 1;
+      });
+    
     }
   }
   render() {
     return html`
-      <score-memory-sphynx></score-memory-sphynx>
+      <score-memory-sphynx turn="${this.turn}">
+      <span slot="player1">${this.score[1]}</span>
+      <span slot="player2">${this.score[2]}</span>
+      </score-memory-sphynx>
       ${this.cards.map(
       (card) => {
         return html`
