@@ -38,6 +38,13 @@ export class ScoreMemorySphynx extends LitElement{
         font-size: 30px;
         font-weight: bolder;
       }
+      #level-select{
+        background: rgba( 0, 0, 0, 0.50 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 0.0px );
+        border-radius: 22px;
+        color:white;
+      }
         `
     }
     static get properties() {
@@ -64,6 +71,11 @@ export class ScoreMemorySphynx extends LitElement{
       <h1>Player 2</h1>
         <div class="score"><slot name="player2"></slot></div>
       </div>
+      <select name="level" id="level-select">
+        <option value="5">Easy</option>
+        <option value="10">Medium</option>
+        <option value="15">Hard</option>
+      </select>
         `;
     }
 

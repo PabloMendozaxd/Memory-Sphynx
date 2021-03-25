@@ -24,6 +24,10 @@ export class MemorySphynx extends LitElement {
         grid-column: 1/7;
         grid-row: 1/2;
       }
+      select{
+        grid-column-start:5;
+        grid-row-start:1;
+      }
     `;
   }
   static get properties() {
@@ -33,6 +37,9 @@ export class MemorySphynx extends LitElement {
         value: [],
       },
       turn: {
+        type: Number,
+      },
+      gameDifficulty: {
         type: Number,
       },
       opened: {
@@ -59,7 +66,7 @@ export class MemorySphynx extends LitElement {
   }
   createCards() {
     this.imgArray = [];
-    const numberOfCards = 15;
+    const numberOfCards = this.gameDifficulty;
 
     for (let i = 0; i < numberOfCards; i++) {
       this.imgArray.push(i + 1);
@@ -121,9 +128,11 @@ export class MemorySphynx extends LitElement {
   }
   render() {
     return html`
+    
       <score-memory-sphynx turn="${this.turn}">
       <span slot="player1">${this.score[1]}</span>
       <span slot="player2">${this.score[2]}</span>
+      
       </score-memory-sphynx>
       ${this.cards.map(
       (card) => {
