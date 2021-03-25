@@ -46,53 +46,52 @@ export class MemorySphynx extends LitElement {
     this.createCards()
     this.canMove = true;
     this.opened = [];
+    this.clicked = true;
     this.score = { 1: 0, 2: 0 }
   }
   createCards() {
     this.imgArray = [];
-    // this.mixedArray=[]
     const numberOfCards = 15;
 
     for (let i = 0; i < numberOfCards; i++) {
       this.imgArray.push(i + 1);
       this.imgArray.push(i + 1);
     }
-    this.cards= this.imgArray.sort(function (a, b) { return (Math.random() - 0.5) });
+    this.cards = this.imgArray.sort(function (a, b) { return (Math.random() - 0.5) });
     console.log(this.cards)
   }
-  __dispatchEvent(event, detail) {
+  myEvent(event, detail) {
     this.dispatchEvent(new Event(event, detail));
   }
 
-  
-  _openCard(e) {
-    e.target.dispatchEvent(new Event('picked'));
 
-    if (this.opened.length<2) {
+  open(e) {
+    e.target.dispatchEvent(new Event('picked'));
+    if (this.opened.length < 2 && this.clicked) {
       this.opened.push(
         {
           picture: e.target.picture,
           target: e.target,
-        })  
-        console.log(this.opened)
-      if (this.opened[0]==this.opened[1]) {
-        console.log("Son pares")
-      }else{
-        this.__clearCards('close')
-      }
+        })
+      this.opened.length ? this.validatePair() : '';
     }
   }
-  
-  __clearCards(event) {
-    return new Promise(res => {
-      setTimeout(() => {
-        this.opened[0].target.dispatchEvent(new Event(event));
-        this.opened[1].target.dispatchEvent(new Event(event));
-        this.opened = [];
-        this.canMove = true;
-        res();
-      }, 1500);
-    });
+
+  close(event) {
+    this.opened[0].target.dispatchEvent(new Event(event));
+    this.opened[1].target.dispatchEvent(new Event(event));
+    this.opened = [];
+    this.clicked = true;
+  }
+  validatePair() {
+    this.canMove = false;
+    console.log(this.opened[0].picture)
+    if (this.opened[0].picture === this.opened[1].picture) {
+      console.log('Son pares')
+    } else {
+      console.log('no son pares')
+      this.close('close')
+    }
   }
   render() {
     return html`
@@ -102,7 +101,7 @@ export class MemorySphynx extends LitElement {
         return html`
           <card-memory-sphynx
           picture="${card}"}"
-          @click="${this._openCard}"
+          @click="${this.open}"
           ></card-memory-sphynx>`
       }
     )}
