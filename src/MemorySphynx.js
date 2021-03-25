@@ -67,15 +67,20 @@ export class MemorySphynx extends LitElement {
   
   _openCard(e) {
     e.target.dispatchEvent(new Event('picked'));
+
     if (this.opened.length<2) {
-      this.opened.push(e.target.picture)  
-      if (this.opened[0]===this.opened[1]) {
+      this.opened.push(
+        {
+          picture: e.target.picture,
+          target: e.target,
+        })  
+        console.log(this.opened)
+      if (this.opened[0]==this.opened[1]) {
         console.log("Son pares")
       }else{
         this.__clearCards('close')
       }
     }
-    console.log(this.opened)
   }
   
   __clearCards(event) {
