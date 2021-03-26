@@ -1,8 +1,8 @@
 import { html, css, LitElement } from 'lit-element';
 
 export class CardMemorySphynx extends LitElement {
-    static get styles() {
-        return css`
+  static get styles() {
+    return css`
           :host {
             display: block;
             cursor:pointer;
@@ -25,58 +25,32 @@ export class CardMemorySphynx extends LitElement {
             -webkit-box-shadow: 0px 0px 20px 1px #000000; 
             box-shadow: 0px 0px 20px 1px #000000;
           }
-          .card.matched{
-            display:none;
+          :host([hide-element]){
+            visibility:hidden;
           }
-          .picked{
-            box-shadow: 0px 0px 16px 8px #FFFFFF;
-          }
-          .unpicked{
+          :host([hide-picture]) img{
             display:none;
           }
         `;
-    }
+  }
 
-    static get properties() {
-      return {
-        picture: {
-          type: String,
-        },
-        matched: {
-          type: Boolean,
-        },
-        picked: {
-          type: Boolean,
-        },
-      };
-    }
-    constructor(){
-      super()
-      this.matched=false;
-      this.picked=false;
-    }
-    connectedCallback() {
-      super.connectedCallback()
-    }
+  static get properties() {
+    return {
+      picture: {
+        type: String,
+      },
+    };
+  }
 
-    firstUpdated() {
-      this.addEventListener('matched', () => {
-        this.matched = true;
-      });
-      this.addEventListener('picked', () => {
-        this.picked = true;
-      });
-      this.addEventListener('close', () => {
-        this.picked = false;
-      });
-    }
+  constructor() {
+    super()
+  }
 
-    render() {
-        return html`
-        <div class="card ${this.matched ? 'matched' : ''}">
-        <img class="${this.picked ? 'picked' :'unpicked'}" src=../assets/img/Picture${this.picture}.png>
+  render() {
+    return html`
+        <div class="card">
+          <img src="${this.picture}">
         </div>
-        
         `;
-    }
+  }
 }

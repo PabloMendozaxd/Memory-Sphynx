@@ -1,27 +1,27 @@
 import { html, css, LitElement } from 'lit-element';
 
-export class ScoreMemorySphynx extends LitElement{
-    static get styles(){
-        return css`
-         :host{
-            height:100%;
-            width:100%;
-            display:flex;
-            justify-content:space-around;
-            align-items:center;
-         }
-         .container {
-            height:80%;
-            width:30%;
-            background: rgba( 255, 255, 255, 0.25 );
-            box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-            backdrop-filter: blur( 3.0px );
-            -webkit-backdrop-filter: blur( 3.0px );
-            border-radius: 10px;
-            text-align:center;
-            display:flex;
-            justify-content:space-around;
-            align-items:center;
+export class ScoreMemorySphynx extends LitElement {
+  static get styles() {
+    return css`
+      :host{
+        height:100%;
+        width:100%;
+        display:flex;
+        justify-content:space-around;
+        align-items:center;
+      }
+      .container {
+        height:80%;
+        width:30%;
+        background: rgba( 255, 255, 255, 0.25 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 3.0px );
+        -webkit-backdrop-filter: blur( 3.0px );
+        border-radius: 10px;
+        text-align:center;
+        display:flex;
+        justify-content:space-around;
+        align-items:center;
       }
       .container.active {
         border:3px solid red;
@@ -44,32 +44,33 @@ export class ScoreMemorySphynx extends LitElement{
         color:white;
       }
         `
-    }
-    static get properties() {
-        return {
-          turn: {
-            type: Number,
-            reflect: true,
-          },
-        };
-      }
-      constructor() {
-        super();
-        this.turn = 1;
-      }
-      
-    render(){
-        return html`
-        <div class="container player-1 ${this.turn === 1 ? 'active' : ''}">
+  }
+  
+  static get properties() {
+    return {
+      turn: {
+        type: Boolean,
+      },
+    };
+  }
+
+  constructor() {
+    super();
+    this.turn = true;
+  }
+
+  render() {
+    return html`
+        <div class="container ${this.turn === true ? 'active' : ''}">
             <h1>Player 1</h1>
             <div class="score"><slot name="player1"></slot></div>
         </div>
         
-      <div class="container player-2 ${this.turn === 2 ? 'active' : ''}">
+      <div class="container ${this.turn === false ? 'active' : ''}">
       <h1>Player 2</h1>
         <div class="score"><slot name="player2"></slot></div>
       </div>
         `;
-    }
+  }
 
 }

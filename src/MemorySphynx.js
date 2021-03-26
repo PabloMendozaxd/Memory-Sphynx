@@ -8,7 +8,7 @@ export class MemorySphynx extends LitElement {
         height:100%;
         width:100%;
         background:url("../assets/img/pink-sphynx-background.jpg") center/cover;
-        padding:2rem;
+        pseting:2rem;
       }
       .memory-header{
         display:flex;
@@ -33,7 +33,7 @@ export class MemorySphynx extends LitElement {
         value: [],
       },
       turn: {
-        type: Number,
+        type: Boolean,
       },
       gameDifficulty: {
         type: Number,
@@ -41,116 +41,149 @@ export class MemorySphynx extends LitElement {
       opened: {
         type: Array,
       },
-      canMove: {
-        type: Boolean,
-      },
+      score: {
+        type: Object,
+      }
     };
   }
 
   constructor() {
-    super()
-    this.canMove = true;
-    this.opened = [];
-    this.clicked = true;
-    this.score = { 1: 0, 2: 0 }
-    this.turn=1;
-    this.gameDifficulty = 5;
+    super();
+    this.__onInit();
   }
 
   connectedCallback() {
-    super.connectedCallback()
-    this.createCards(this.gameDifficulty)
+    super.connectedCallback();
+    this.__createCards(this.numberOfPairs);
   }
 
-  createCards(numberOfCards) {
+  __onInit() {
+    this.selectedCards = [];
+    this.clicked = true;
+    this.score = { playerOne: 0, playerTwo: 0 }
+    this.turn = true;
+    this.numberOfPairs = 5;
+    this.matchedPairs = 0;
+    this.winner = "";
+  }
+
+  __createCards(numberOfCards) {
     this.imgArray = [];
-    for (let i = 0; i < numberOfCards; i++) {
-      this.imgArray.push(i + 1);
-      this.imgArray.push(i + 1);
-    }
-    this.cards = this.imgArray.sort(function (a, b) { return (Math.random() - 0.5) });
-    console.table(this.cards)
-  }
-
-  createEvent(event, detail) {
-    this.dispatchEvent(new Event(event, detail));
-  }
-
-
-  open(e) {
-    e.target.dispatchEvent(new Event('picked'));
-    if (this.opened.length < 2 && this.clicked) {
-      this.opened.push(
-        {
-          picture: e.target.picture,
-          target: e.target,
-        })
-      if (this.opened.length == 2) {
-        this.validatePair();
-      }
-    }
-  }
-
-  close(event) {
-    return new Promise(res => {
-      setTimeout(() => {
-        this.opened[0].target.dispatchEvent(new Event(event));
-        this.opened[1].target.dispatchEvent(new Event(event));
-        this.opened = [];
-        this.clicked = true;
-        res();
-      }, 1500);
-    });
-  }
-  validatePair() {
-    this.canMove = false;
-    if (this.opened[0].picture === this.opened[1].picture) {
-      this.close('matched')
-      this.score[this.turn] += 1;
-
-      if (this.score[1] + this.score[2] === length) {
-        this.__dispatchEvent('gameOver', {
-          detail: {
-            winner: this.score[1] > this.score[2] ? 1 : 2,
-          },
-        });
-      }
-      this.requestUpdate();
-    } else {
-      this.close('close').then(() => {
-        this.turn = this.turn === 1 ? 2 : 1;
+    for (let i = 1; i <= numberOfCards; i++) {
+      this.imgArray.push({
+        picture: `../assets/img/Picture${i}.png`,
+        value: i,
+        setAttrHidePicture: true,
+        setAttrHideElement: false,
       });
-    
+      this.imgArray.push({
+        picture: `../assets/img/Picture${i}.png`,
+        value: i,
+        setAttrHidePicture: true,
+        setAttrHideElement: false,
+      });
+    }
+    this.cards = this.imgArray.sort((a, b) => (Math.random() - 0.5));
+  }
+
+  __changeTurn() {
+    this.turn = !this.turn;
+  }
+
+  __changeScore() {
+    if (this.turn) {
+      this.score.playerOne++;
+    } else {
+      this.score.playerTwo++;
     }
   }
-  __selectLevel(e){
-    this.createCards(parseInt(e.target.value));
-  
-    
+
+  __countPairs() {
+    this.matchedPairs++;
+    if (this.matchedPairs === this.numberOfPairs) {
+      if (this.score.playerOne > this.score.playerTwo) {
+        alert('Gano player1');
+      } else {
+        alert('gano player2');
+      }
+    }
   }
+
+  __clearCards() {
+    this.selectedCards = [];
+  }
+
+  __hidePairElement() {
+    this.selectedCards[0].setAttrHideElement = true;
+    this.selectedCards[1].setAttrHideElement = true;
+  }
+
+  __hidePairPicture(){
+    this.selectedCards[0].setAttrHidePicture = true;
+    this.selectedCards[1].setAttrHidePicture = true;
+  }
+
+  __showPicture(selectedCard){
+    selectedCard.setAttrHidePicture = false;
+  }
+
+  __selectCard(e, selectedCard) {
+    if (this.selectedCards.length < 2) {
+      this.selectedCards.push(selectedCard);
+      this.__showPicture(selectedCard);
+      this.requestUpdate();
+      if (this.selectedCards.length == 2) {
+        let isPair = this.__validatePair(this.selectedCards[0].value, this.selectedCards[1].value);
+        if (isPair) {
+          setTimeout(() => {
+            this.__hidePairElement();
+            this.__clearCards();
+            this.__changeScore();
+            this.__changeTurn();
+            this.__countPairs();
+            this.requestUpdate();
+          }, 1000)
+        } else {
+          setTimeout(() => {
+            this.__hidePairPicture();
+            this.__clearCards();
+            this.__changeTurn();
+            this.requestUpdate();
+          }, 1000);
+        }
+      }
+    }
+  }
+
+  __validatePair(card1, card2) {
+    return card1 === card2;
+  }
+
+  __selectLevel(e) {
+    this.__onInit();
+    this.__createCards(parseInt(e.detail));
+  }
+
   render() {
     return html`
-    <select @change="${this.__selectLevel}" name="numberOfCards" id="cars">
-      <option value="5">Easy</option>
-      <option value="10">Medium</option>
-      <option value="15">Hard</option>
-    </select>
-
+    <level-memory-sphynx @level-change="${this.__selectLevel}"></level-memory-sphynx>
     <div class="memory-header">
-      <score-memory-sphynx turn="${this.turn}">
-      <span slot="player1">${this.score[1]}</span>
-      <span slot="player2">${this.score[2]}</span>
+      <score-memory-sphynx .turn="${this.turn}">
+      <span slot="player1">${this.score.playerOne}</span>
+      <span slot="player2">${this.score.playerTwo}</span>
       </score-memory-sphynx>
     </div>
 
     <div class="memory-grid">
       ${this.cards.map(
-      card => html`
+      (card) => html`
           <card-memory-sphynx
-          picture="${card}"
-          @click="${this.open}"
+          .picture="${card.picture}"
+          ?hide-element="${card.setAttrHideElement}"
+          ?hide-picture="${card.setAttrHidePicture}"
+          @click="${e => this.__selectCard(e, card)}"
           ></card-memory-sphynx>`
-      )}
+    )}
     </div>
     `
   }
