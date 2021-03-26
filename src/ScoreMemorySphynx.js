@@ -24,9 +24,7 @@ export class ScoreMemorySphynx extends LitElement{
             align-items:center;
       }
       .container.active {
-        box-shadow: 10px 10px 31px -11px rgba(230, 135, 135, 0.65);
-        -webkit-box-shadow: 10px 10px 31px -11px rgba(230, 135, 135, 0.65);
-        -moz-box-shadow: 10px 10px 31px -11px rgba(230, 135, 135, 0.65);
+        border:3px solid red;
       }
       .score {
         border: 5px solid white;
@@ -59,7 +57,7 @@ export class ScoreMemorySphynx extends LitElement{
         super();
         this.turn = 1;
       }
-
+      
     render(){
         return html`
         <div class="container player-1 ${this.turn === 1 ? 'active' : ''}">
@@ -71,11 +69,6 @@ export class ScoreMemorySphynx extends LitElement{
       <h1>Player 2</h1>
         <div class="score"><slot name="player2"></slot></div>
       </div>
-      <select name="level" id="level-select">
-        <option value="5">Easy</option>
-        <option value="10">Medium</option>
-        <option value="15">Hard</option>
-      </select>
         `;
     }
 

@@ -4,29 +4,25 @@ export class MemorySphynx extends LitElement {
   static get styles() {
     return css`
       :host {
+        display:block;
         height:100%;
         width:100%;
         background:url("../assets/img/pink-sphynx-background.jpg") center/cover;
-        padding:8%;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-        gap: 12px 12px;
-        grid-template-areas:
-          ". . . . . ."
-          ". . . . . ."
-          ". . . . . ."
-          ". . . . . ."
-          ". . . . . ."
-          ". . . . . .";
+        padding:2rem;
       }
-      score-memory-sphynx{
-        grid-column: 1/7;
-        grid-row: 1/2;
+      .memory-header{
+        display:flex;
+        justify-content:space-between;
+        margin-bottom: 2rem;
+      }
+      .memory-grid{
+        display:grid;
+        grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+        grid-auto-rows: 150px;
+        gap: 1rem;
       }
       select{
-        grid-column-start:5;
-        grid-row-start:1;
+        
       }
     `;
   }
@@ -57,25 +53,26 @@ export class MemorySphynx extends LitElement {
     this.opened = [];
     this.clicked = true;
     this.score = { 1: 0, 2: 0 }
-    this.gameDifficulty = 0;
+    this.turn=1;
+    this.gameDifficulty = 5;
   }
 
   connectedCallback() {
     super.connectedCallback()
-    this.createCards()
+    this.createCards(this.gameDifficulty)
   }
-  createCards() {
-    this.imgArray = [];
-    const numberOfCards = this.gameDifficulty;
 
+  createCards(numberOfCards) {
+    this.imgArray = [];
     for (let i = 0; i < numberOfCards; i++) {
       this.imgArray.push(i + 1);
       this.imgArray.push(i + 1);
     }
     this.cards = this.imgArray.sort(function (a, b) { return (Math.random() - 0.5) });
-    console.log(this.cards)
+    console.table(this.cards)
   }
-  myEvent(event, detail) {
+
+  createEvent(event, detail) {
     this.dispatchEvent(new Event(event, detail));
   }
 
@@ -126,23 +123,35 @@ export class MemorySphynx extends LitElement {
     
     }
   }
+  __selectLevel(e){
+    this.createCards(parseInt(e.target.value));
+  
+    
+  }
   render() {
     return html`
-    
+    <select @change="${this.__selectLevel}" name="numberOfCards" id="cars">
+      <option value="5">Easy</option>
+      <option value="10">Medium</option>
+      <option value="15">Hard</option>
+    </select>
+
+    <div class="memory-header">
       <score-memory-sphynx turn="${this.turn}">
       <span slot="player1">${this.score[1]}</span>
       <span slot="player2">${this.score[2]}</span>
-      
       </score-memory-sphynx>
+    </div>
+
+    <div class="memory-grid">
       ${this.cards.map(
-      (card) => {
-        return html`
+      card => html`
           <card-memory-sphynx
-          picture="${card}"}"
+          picture="${card}"
           @click="${this.open}"
           ></card-memory-sphynx>`
-      }
-    )}
+      )}
+    </div>
     `
   }
 }
