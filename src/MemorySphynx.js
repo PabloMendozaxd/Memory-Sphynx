@@ -169,7 +169,9 @@ export class MemorySphynx extends LitElement {
 
   __selectLevel(e) {
     this.__onInit();
+    this.numberOfPairs=e.detail;
     this.__createCards(parseInt(e.detail));
+    this.requestUpdate();
   }
 
   render() {
