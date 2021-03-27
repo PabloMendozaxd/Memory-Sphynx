@@ -24,16 +24,19 @@ export class ScoreMemorySphynx extends LitElement {
         align-items:center;
       }
       .container.active {
-        border:3px solid red;
+        -webkit-box-shadow: 0px 0px 28px 9px rgba(255,255,255,0.82); 
+        box-shadow: 0px 0px 28px 9px rgba(255,255,255,0.82);
       }
       .score {
-        border: 5px solid white;
-        border-radius: 22px;
+        height:8%;
+        width:8%;
+        border: 5px solid black;
+        border-radius: 16px;
         padding: 5px;
       }
       ::slotted(span) {
-        color: #fafafa;
-        font-size: 30px;
+        color: black;
+        font-size: 50px;
         font-weight: bolder;
       }
       #level-select{
