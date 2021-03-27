@@ -102,9 +102,9 @@ export class MemorySphynx extends LitElement {
     this.matchedPairs++;
     if (this.matchedPairs === this.numberOfPairs) {
       if (this.score.playerOne > this.score.playerTwo) {
-        alert('Gano player1');
+        alert('CONGRATS!🎉 Player 1, you won');
       } else {
-        alert('gano player2');
+        alert('CONGRATS!🎉 Player 2, you won');
       }
     }
   }
@@ -136,6 +136,10 @@ export class MemorySphynx extends LitElement {
         let isPair = this.__validatePair(this.selectedCards[0].value, this.selectedCards[1].value);
         if (isPair) {
           setTimeout(() => {
+            const audio = new Audio(
+              'http://codeskulptor-demos.commondatastorage.googleapis.com/descent/gotitem.mp3'
+            );
+            audio.play();
             this.__hidePairElement();
             this.__clearCards();
             this.__changeScore();
@@ -149,6 +153,10 @@ export class MemorySphynx extends LitElement {
             this.__clearCards();
             this.__changeTurn();
             this.requestUpdate();
+            const audio1 = new Audio(
+              'http://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3'
+            );
+            audio1.play();
           }, 1000);
         }
       }
